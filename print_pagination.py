@@ -1,6 +1,6 @@
 def print_pagination(current_page, total_pages, boundaries, around):
     # Check exceptions
-    ## Is any input parametrs negative or incorrect?
+    ## Is any input parameters negative or incorrect?
 
     if current_page < 1:
         print('Current page should be at least 1 or bigger')
@@ -30,7 +30,7 @@ def print_pagination(current_page, total_pages, boundaries, around):
         print('Around cannot be more than half of total')
         return
     
-    # Handle edge cases, whene around and boundaries equil zero
+    # Handle edge cases, when around and boundaries equil zero
     if current_page==total_pages and (around, boundaries) == (0,0):
         print(current_page)
         return
