@@ -62,6 +62,15 @@ class TestPagination(unittest.TestCase):
 
         # Compare the output to the expected result
         self.assertEqual(output, "Around cannot be negative")
+    
+    def test_around_invalid(self):
+        # Test around more than half of total
+        with redirect_stdout(self.buf):
+            print_pagination(1, 1, 0, 1)
+        output = self.buf.getvalue().strip()
+
+        # Compare the output to the expected result
+        self.assertEqual(output, "Around cannot be more than half of total")
 
     def test_pagination(self):
         # Test pagination output with various parameters
@@ -74,6 +83,7 @@ class TestPagination(unittest.TestCase):
         self.assertEqual(output, '1 2 3 ... 9 10\n1 2 3 4 5 6 7 ... 9 10\n1 2 ... 6 7 8 9 10\n1 2 ... 8 9 10')
 
     def test_more_pagination(self):
+        # Test pagination output with another input
         with redirect_stdout(self.buf):
             print_pagination(1, 10, 5, 5)
             print_pagination(100, 101, 3, 1)
@@ -81,6 +91,14 @@ class TestPagination(unittest.TestCase):
             print_pagination(1, 2, 1, 0)
         output = self.buf.getvalue().strip()
         self.assertEqual(output, '1 2 3 4 5 6 7 8 9 10\n1 2 3 ... 99 100 101\n1 2 3 ... 36 37 38 39 40 41 42 ... 331 332 333\n1 2')
+
+    def test_edge_case(self):
+        # Test pagination with edge cases, when around and boundries == zero
+        with redirect_stdout(self.buf):
+            print_pagination(1, 1, 0, 0)
+            print_pagination(10, 10, 0, 0)
+        output = self.buf.getvalue().strip()
+        self.assertEqual(output, '1\n10')
 
 
 if __name__ == '__main__':

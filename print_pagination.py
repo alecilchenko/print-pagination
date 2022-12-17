@@ -21,10 +21,18 @@ def print_pagination(current_page, total_pages, boundaries, around):
     elif boundaries > total_pages/2:
         print('Boundaries cannot be more than half of total')
         return
-
+    
     ## Is around negative or have incorrect value?
     if around < 0:
         print('Around cannot be negative')
+        return
+    elif around > total_pages/2:
+        print('Around cannot be more than half of total')
+        return
+    
+    # Handle edge cases, whene around and boundaries equil zero
+    if current_page==total_pages and (around, boundaries) == (0,0):
+        print(current_page)
         return
     
     pages_to_link = []
@@ -73,4 +81,6 @@ if __name__ == '__main__':
     print_pagination(1, 10, 5, 5)
     print_pagination(100, 101, 3, 1)
     print_pagination(39, 333, 3, 3)
-    print_pagination(1, 2, 1, 0)
+    print_pagination(10, 10, 0, 0)
+    print_pagination(1, 1, 0, 1)
+    print_pagination(9, 10, 1, 1)
