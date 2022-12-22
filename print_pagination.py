@@ -42,12 +42,12 @@ def print_pagination(current_page, total_pages, boundaries, around):
         marker += 1
 
     # Add hide links if marker is outside range of current page BEFORE
-    if marker < current_page - around:
+    if marker < current_min:
         pages_to_link.append('...')  
 
     # Check that marker not inside current page range and initionalize as a first page of range
     if (not current_min <= marker <= current_page) and marker < current_min:
-        marker = current_page-around
+        marker = current_min
     
     # Add current page with his range and check that it isn't more than total pages
     while marker <= current_max and marker <= total_pages:
