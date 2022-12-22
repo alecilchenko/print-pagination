@@ -1,81 +1,79 @@
 def print_pagination(current_page, total_pages, boundaries, around):
     # Check exceptions
-    ## Is any input parameters negative or incorrect?
 
+    ## Is current_page/total_pages negative or incorrect?
     if current_page < 1:
-        print('Current page should be at least 1 or bigger')
-        return
+        raise ValueError('Current page should be at least 1 or bigger')
 
     if total_pages < 1:
-        print('Total page should be at least 1 or bigger')
-        return
-
+        raise ValueError('Total page should be at least 1 or bigger')
     elif current_page > total_pages:
-        print('Current page cannot be bigget than total')
-        return
-    
-    ## Is boundaries negative or have incorrect value?
+        raise ValueError('Current page cannot be bigget than total')
+
+    ## Is boundaries negative or aroud have negative value?
     if boundaries < 0:
-        print('Boundaries cannot be negative')
-        return
-    elif boundaries > total_pages/2:
-        print('Boundaries cannot be more than half of total')
-        return
+        raise ValueError('Boundaries cannot be negative')
+    elif around < 0:
+        raise ValueError('Around cannot be negative')
+
     
-    ## Is around negative or have incorrect value?
-    if around < 0:
-        print('Around cannot be negative')
-        return
-    elif around > total_pages/2:
-        print('Around cannot be more than half of total')
-        return
-    
-    # Handle edge cases, when around and boundaries equil zero
+    # Handle edge cases
+    ## when around and boundaries equil zero
     if current_page==total_pages and (around, boundaries) == (0,0):
         print(current_page)
         return
+    ## When around or boundaries more than half of total
+    if around >= total_pages/2 or boundaries >= total_pages/2:
+        for page in range(1, total_pages+1):
+            print(page, end=' ')
+        print()
+        return
     
     pages_to_link = []
-    count = 1 # Count was implemented to check all possible conditions of each pages 
+    marker = 1 # marker was implemented to check all possible conditions of each pages 
+    current_min = current_page - around
+    current_max = current_page + around 
+    start_boundaries_max = boundaries
+    end_boudaries_min = total_pages - boundaries + 1
 
     # Add start boundaries
-    for i in range(1, boundaries+1):
-        pages_to_link.append(i)
-        count += 1
+    while 1 <= marker <= start_boundaries_max:
+        pages_to_link.append(marker)
+        marker += 1
 
-    # Add hide link if count is outside range of current page BEFORE
-    if count < current_page - around:
+    # Add hide links if marker is outside range of current page BEFORE
+    if marker < current_page - around:
         pages_to_link.append('...')  
 
-    # Check that count not inside current page range and initionalize as a first page of range
-    if count not in range(current_page-around, current_page+around+1):
-        count = current_page-around
+    # Check that marker not inside current page range and initionalize as a first page of range
+    if (not current_min <= marker <= current_page) and marker < current_min:
+        marker = current_page-around
     
-    # Add current page with his range and check that it isn't more than total or not in start boundaries
-    for i in range(count, current_page+around+1):
-        if i < total_pages and i not in range(1, boundaries+1):
-            pages_to_link.append(i)
-            count += 1
-    
-    # Add hide link if count is outside of current page range but don't achive boundaries
-    if count > current_page+around and count < total_pages-boundaries+1:
+    # Add current page with his range and check that it isn't more than total pages
+    while marker <= current_max and marker <= total_pages:
+        pages_to_link.append(marker)
+        marker += 1 
+
+    # Add hide link if marker is outside of current page range but don't achive boundaries
+    if (not current_page <= marker <= current_max) and (current_max < marker < end_boudaries_min):
         pages_to_link.append('...')
     
-    # Check that count not in end boundaries range and initionalize as a first page of range
-    if count not in range(total_pages-boundaries+1, total_pages+1):
-        count = total_pages-boundaries+1
+    # Check that marker not in end boundaries range and initionalize as a first page of range
+    if (not end_boudaries_min <= marker <= total_pages) and marker < end_boudaries_min:
+        marker = end_boudaries_min
 
     # Add end boudaries
-    for i in range(count, total_pages+1):
-        pages_to_link.append(i)
+    while marker <= total_pages:
+        pages_to_link.append(marker)
+        marker += 1
     
     # Print the pagination
     print(' '.join([str(page) for page in pages_to_link]))
 
 if __name__ == '__main__':
     # Example usage
-    print_pagination(1, 10, 2, 2)
-    print_pagination(5, 10, 2, 2)
+    print_pagination(4, 5, 1, 0)
+    print_pagination(4, 10, 2, 2)
     print_pagination(8, 10, 2, 2)
     print_pagination(10, 10, 2, 2)
     print_pagination(1, 10, 5, 5)
@@ -84,3 +82,13 @@ if __name__ == '__main__':
     print_pagination(10, 10, 0, 0)
     print_pagination(1, 1, 0, 1)
     print_pagination(9, 10, 1, 1)
+    print()
+    print_pagination(5, 10, 1, 11)
+    print_pagination(5, 10, 11, 1)
+    print_pagination(1, 10, 3, 1)
+    print_pagination(9, 10, 0, 1)
+    
+    print_pagination(5, 10, 9, 0)
+    
+    #print_pagination(9, 10, -2, 1)
+    
