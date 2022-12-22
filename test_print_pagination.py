@@ -29,12 +29,26 @@ class TestPagination(unittest.TestCase):
         with self.assertRaises(ValueError):
             print_pagination(1, 10, 2, -1)
 
-    def test_around_and_boundaries_0(self):
+    def test_around_and_boundaries_0_current_last(self):
         with redirect_stdout(self.buf):
             print_pagination(10, 10, 0, 0)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '10')  
+        self.assertEqual(output, '... 10')  
+    
+    def test_around_and_boundaries_0_current_first(self):
+        with redirect_stdout(self.buf):
+            print_pagination(1, 10, 0, 0)
+        output = self.buf.getvalue().strip()
+
+        self.assertEqual(output, '1 ...') 
+
+    def test_around_and_boundaries_0_current_middle(self):
+        with redirect_stdout(self.buf):
+            print_pagination(5, 10, 0, 0)
+        output = self.buf.getvalue().strip()
+
+        self.assertEqual(output, '... 5 ...') 
 
     def test_around_more_than_half_of_total_pages(self):
         with redirect_stdout(self.buf):

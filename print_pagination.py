@@ -16,12 +16,7 @@ def print_pagination(current_page, total_pages, boundaries, around):
     elif around < 0:
         raise ValueError('Around cannot be negative')
 
-    
     # Handle edge cases
-    ## when around and boundaries equil zero
-    if current_page==total_pages and (around, boundaries) == (0,0):
-        print(current_page)
-        return
     ## When around or boundaries more than half of total
     if around >= total_pages/2 or boundaries >= total_pages/2:
         for page in range(1, total_pages+1):
@@ -72,6 +67,7 @@ def print_pagination(current_page, total_pages, boundaries, around):
 
 if __name__ == '__main__':
     # Example usage
+    '''
     print_pagination(4, 5, 1, 0)
     print_pagination(4, 10, 2, 2)
     print_pagination(8, 10, 2, 2)
@@ -87,8 +83,8 @@ if __name__ == '__main__':
     print_pagination(5, 10, 11, 1)
     print_pagination(1, 10, 3, 1)
     print_pagination(9, 10, 0, 1)
-    
-    print_pagination(5, 10, 9, 0)
+    '''
+    print_pagination(10, 10, 0, 0)
     
     #print_pagination(9, 10, -2, 1)
     
