@@ -146,5 +146,12 @@ class TestPagination(unittest.TestCase):
 
         self.assertEqual(output, '1 2 ... 5 ... 9 10')
 
+    def test_current_inside_end_boudaries(self):
+        # Test case when [nums ... num ... nums]
+        with redirect_stdout(self.buf):
+            print_pagination(9, 10, 4, 1)
+        output = self.buf.getvalue().strip()
+
+        self.assertEqual(output, '1 2 3 4 ... 7 8 9 10')
 if __name__ == '__main__':
     unittest.main()

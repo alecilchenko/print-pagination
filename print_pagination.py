@@ -41,7 +41,9 @@ def print_pagination(current_page, total_pages, boundaries, around):
         pages_to_link.append('...')  
 
     # Check that marker not inside current page range and initionalize as a first page of range
-    if (not current_min <= marker <= current_page) and marker < current_min:
+    if end_boudaries_min < current_min:
+        marker = end_boudaries_min
+    elif (not current_min <= marker <= current_page) and marker < current_min:
         marker = current_min
     
     # Add current page with his range and check that it isn't more than total pages
@@ -55,7 +57,7 @@ def print_pagination(current_page, total_pages, boundaries, around):
     
     # Check that marker not in end boundaries range and initionalize as a first page of range
     if (not end_boudaries_min <= marker <= total_pages) and marker < end_boudaries_min:
-        marker = end_boudaries_min
+        marker = end_boudaries_min 
 
     # Add end boudaries
     while marker <= total_pages:
@@ -84,7 +86,7 @@ if __name__ == '__main__':
     print_pagination(1, 10, 3, 1)
     print_pagination(9, 10, 0, 1)
     '''
-    print_pagination(10, 10, 0, 0)
+    print_pagination(9, 10, 4, 1)
     
     #print_pagination(9, 10, -2, 1)
     
