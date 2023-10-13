@@ -1,12 +1,12 @@
-import unittest
-from print_pagination import *
-import io
 from contextlib import redirect_stdout
+import unittest
+import io
+
+from print_pagination import print_pagination
+
 
 class TestPagination(unittest.TestCase):
-
     def setUp(self):
-        # Create a new StringIO object before each test
         self.buf = io.StringIO()
 
     def test_current_page_less_than_1(self):
@@ -34,94 +34,94 @@ class TestPagination(unittest.TestCase):
             print_pagination(10, 10, 0, 0)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '... 10')  
-    
+        self.assertEqual(output, "... 10")
+
     def test_around_and_boundaries_0_current_first(self):
         with redirect_stdout(self.buf):
             print_pagination(1, 10, 0, 0)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 ...') 
+        self.assertEqual(output, "1 ...")
 
     def test_around_and_boundaries_0_current_middle(self):
         with redirect_stdout(self.buf):
             print_pagination(5, 10, 0, 0)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '... 5 ...') 
+        self.assertEqual(output, "... 5 ...")
 
     def test_around_more_than_half_of_total_pages(self):
         with redirect_stdout(self.buf):
             print_pagination(10, 10, 0, 6)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 2 3 4 5 6 7 8 9 10')
+        self.assertEqual(output, "... 4 5 6 7 8 9 10")
 
     def test_boundaries_more_than_half_of_total_pages(self):
         with redirect_stdout(self.buf):
             print_pagination(10, 10, 6, 0)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 2 3 4 5 6 7 8 9 10')
+        self.assertEqual(output, "1 2 3 4 5 6 7 8 9 10")
 
     def test_normal_case(self):
         with redirect_stdout(self.buf):
             print_pagination(5, 10, 5, 2)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 2 3 4 5 6 7 8 9 10')
+        self.assertEqual(output, "1 2 3 4 5 6 7 8 9 10")
 
     def test_current_page_near_start_boundaries(self):
         with redirect_stdout(self.buf):
             print_pagination(1, 10, 3, 1)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 2 3 ... 8 9 10')
+        self.assertEqual(output, "1 2 3 ... 8 9 10")
 
     def test_current_page_near_end_boundaries(self):
         with redirect_stdout(self.buf):
             print_pagination(8, 10, 2, 2)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 2 ... 6 7 8 9 10')
+        self.assertEqual(output, "1 2 ... 6 7 8 9 10")
 
     def test_current_page_in_middle(self):
         with redirect_stdout(self.buf):
             print_pagination(5, 10, 2, 1)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 2 ... 4 5 6 ... 9 10')
+        self.assertEqual(output, "1 2 ... 4 5 6 ... 9 10")
 
-    def test_current_last_boundries_zero(self):
+    def test_current_last_boundaries_zero(self):
         # Test case when [... nums]
         with redirect_stdout(self.buf):
             print_pagination(10, 10, 0, 1)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '... 9 10')
+        self.assertEqual(output, "... 9 10")
 
-    def test_current_near_end_boundries_zero(self):
+    def test_current_near_end_boundaries_zero(self):
         with redirect_stdout(self.buf):
             print_pagination(9, 10, 0, 1)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '... 8 9 10')
+        self.assertEqual(output, "... 8 9 10")
 
-    def test_current_first_boundries_zero(self):
+    def test_current_first_boundaries_zero(self):
         # Test case when [nums ...]
         with redirect_stdout(self.buf):
             print_pagination(1, 10, 0, 1)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 2 ...')
+        self.assertEqual(output, "1 2 ...")
 
-    def test_current_middle_boundries_zero(self):
+    def test_current_middle_boundaries_zero(self):
         # Test case when [... nums ...]
         with redirect_stdout(self.buf):
             print_pagination(5, 10, 0, 1)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '... 4 5 6 ...')
+        self.assertEqual(output, "... 4 5 6 ...")
 
     def test_current_first_around_zero(self):
         # Test case when [nums ... nums]
@@ -129,14 +129,14 @@ class TestPagination(unittest.TestCase):
             print_pagination(1, 10, 1, 0)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 ... 10')
+        self.assertEqual(output, "1 ... 10")
 
     def test_current_last_around_zero(self):
         with redirect_stdout(self.buf):
             print_pagination(1, 10, 1, 0)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 ... 10')
+        self.assertEqual(output, "1 ... 10")
 
     def test_current_middle_around_zero(self):
         # Test case when [nums ... num ... nums]
@@ -144,14 +144,28 @@ class TestPagination(unittest.TestCase):
             print_pagination(5, 10, 2, 0)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 2 ... 5 ... 9 10')
+        self.assertEqual(output, "1 2 ... 5 ... 9 10")
 
-    def test_current_inside_end_boudaries(self):
+    def test_current_inside_end_boundaries(self):
         # Test case when [nums ... num ... nums]
         with redirect_stdout(self.buf):
             print_pagination(9, 10, 4, 1)
         output = self.buf.getvalue().strip()
 
-        self.assertEqual(output, '1 2 3 4 ... 7 8 9 10')
-if __name__ == '__main__':
+        self.assertEqual(output, "1 2 3 4 ... 7 8 9 10")
+
+    def test_boundaries_more_than_total(self):
+        with redirect_stdout(self.buf):
+            print_pagination(2, 10, 11, 1)
+        output = self.buf.getvalue().strip()
+        self.assertEqual(output, "1 2 3 4 5 6 7 8 9 10")
+
+    def test_around_more_than_total(self):
+        with redirect_stdout(self.buf):
+            print_pagination(2, 10, 1, 11)
+        output = self.buf.getvalue().strip()
+        self.assertEqual(output, "1 2 3 4 5 6 7 8 9 10")
+
+
+if __name__ == "__main__":
     unittest.main()
