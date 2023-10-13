@@ -1,6 +1,10 @@
 def print_pagination(
-    current_page: int, total_pages: int, boundaries: int, around: int
+        current_page: int,
+        total_pages: int,
+        boundaries: int,
+        around: int
 ) -> None:
+
     check_errors = {
         "Current page should be at least 1 or bigger.":
             current_page >= 1,
@@ -37,6 +41,7 @@ def print_pagination(
     result = start.union(middle, end)
     result = list(result)
     all_pages = [page for page in range(1, total_pages + 1)]
+
     flag = True
     count = 0
     for number in all_pages:
@@ -49,4 +54,3 @@ def print_pagination(
             count += 1
     for i in result:
         print(i, end=" ")
-    print()
